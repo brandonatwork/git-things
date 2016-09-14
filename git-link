@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# This script will create a link to either the specified commit, or HEAD if no commit is specified.
+# 
+# Created for cerner_2^5_2016
+
+# Apologies for the non-idiomatic git help.
+if [ "$1" == "-h" ]; then
+  echo "Usage: 
+ git link [commit] [remote]
+
+ Commit and remote are optional, but if remote is specified, a commit must be specified as well. Use HEAD for the most recent commit."
+  exit 1
+fi
+
+COMMIT=$(git rev-parse ${1:-HEAD})
+REMOTE=${2:-origin}
+GITHUB_URL=$(git remote get-url $REMOTE | sed "s/\.git$//" | sed "s/git@\\([^:]*\\):/https:\/\/\\1\//")
+
+echo $GITHUB_URL/commit/$COMMIT
