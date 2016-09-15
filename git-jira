@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Git command to generate a link to the JIRA associated with the current branch.  This assumes 
+# that the naming convention for branches is the jira queue name in caps, a dash, and a string
+# of numbers, and any other text that can be ignored.  Behavior of this command is undefined
+# for master, detached heads and branches with other naming conventions.
+#
+# The configuration property jira.server must be set! Repositories using different JIRA servers
+# may set a local property to override the global. Property should not end with a slash.
+
+# Created for cerner_2^5_2016
+
+SERVER=$(git config --get jira.server)
+BRANCH=$(git describe --contains --all HEAD  | sed 's/^\([A-Z]*-[0-9]*\).*$/\1/')
+if [[ -z "${SERVER// }" ]]; then
+  echo "Git property jira.server must be set" && exit 1
+fi
+
+echo $SERVER/$BRANCH
