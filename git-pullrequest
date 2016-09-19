@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Git command to generate a link to create a pull request for the current branch.
+
+# cerner_2^5_2016
+GITHUB_URL=$(git remote get-url origin | sed "s/\.git$//" | sed "s/git@\\([^:]*\\):/https:\/\/\\1\//")
+BRANCH=$(git describe --contains --all HEAD)
+
+echo $GITHUB_URL/pull/new/$BRANCH
