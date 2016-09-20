@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+#
+# Generate an emoji "randomart" based on HEAD or the specified commit's SHA.  
+# 
+# Created for cerner_2^5_2016
+
+CHARS={ :eye_l => %w( • ✯ ✧ * o O ^ ⌒ ￣ ▔ o ≧ ≦ > < - ),
+        :eye_r => %w( • ✯ ✧ * o O ^ ⌒ ￣ ▔ O ≦ ≧ < > - ),
+        :mouth => %w( ω ▽ﾟ ▽ 人 ʖ ᵕ ∀ _ o ~ ‿‿ ヮ з . & ~),
+        :emote => %w( ; ' ヾ ୧ 〣 ゞ ! ﾉ ☆ φ ﾐ . ♯ = ҂ ♫) }
+
+COMMIT=`git rev-parse #{ARGV[0] || "HEAD"}`.strip 
+SLICES=COMMIT.chars.each_slice(4).map(&:join)
+line=0
+puts "+----------------+"
+SLICES.each do |value|
+  print CHARS[:emote][value[2].to_i(16)]+CHARS[:eye_l][value[0].to_i(16)]+CHARS[:mouth][value[1].to_i(16)]+CHARS[:eye_r][value[0].to_i(16)]+CHARS[:emote][value[3].to_i(16)]+"   "
+  line+=1 
+  puts if line % 2 == 0
+end
+puts "+----------------+"
